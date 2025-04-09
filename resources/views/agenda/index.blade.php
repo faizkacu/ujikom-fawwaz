@@ -15,6 +15,7 @@
     <table class="w-full mt-4 border">
         <thead>
             <tr class="bg-gray-200">
+                <th class="px-4 py-2">Tanggal</th>
                 <th class="px-4 py-2">Deskripsi</th>
                 <th class="px-4 py-2">Aksi</th>
             </tr>
@@ -22,6 +23,7 @@
         <tbody>
             @foreach ($agendas as $agenda)
                 <tr class="border-t">
+                    <td class="px-4 py-2">{{ $agenda->tanggal }}</td>
                     <td class="px-4 py-2">{{ $agenda->deskripsi }}</td>
                     <td class="px-4 py-2 flex space-x-2">
                         <a href="{{ route('agenda.edit', $agenda->id) }}" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</a>

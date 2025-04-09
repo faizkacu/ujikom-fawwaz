@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Agenda extends Model
 {
-    protected $fillable = ['deskripsi'];
+    protected $fillable = ['deskripsi', 'tanggal'];
 }

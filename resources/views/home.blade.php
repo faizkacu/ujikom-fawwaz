@@ -10,30 +10,51 @@
 
     <!-- Alpine.js -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+         html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 <body class="bg-white text-gray-800">
 
-<!-- ✅ NAVBAR -->
-<header class="sticky top-0 z-50 bg-white shadow-md">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-        <a href="#" class="text-xl font-bold text-blue-600">Nama Sekolah</a>
-        <nav x-data="{ open: false }" class="relative">
-            <button @click="open = !open" class="md:hidden text-gray-700 focus:outline-none">
-                ☰
-            </button>
-            <ul :class="{'block': open, 'hidden': !open}" class="absolute md:static right-0 mt-2 md:mt-0 w-48 md:w-auto bg-white md:bg-transparent md:flex space-y-2 md:space-y-0 md:space-x-6 text-sm md:text-base shadow md:shadow-none rounded md:rounded-none p-4 md:p-0">
-                <li><a href="#hero" class="hover:text-blue-600">Beranda</a></li>
-                <li><a href="#galeri" class="hover:text-blue-600">Galeri</a></li>
-                <li><a href="#berita" class="hover:text-blue-600">Berita</a></li>
-                <li><a href="#agenda" class="hover:text-blue-600">Agenda</a></li>
-                <li><a href="#kontak" class="hover:text-blue-600">Kontak</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-bold text-blue-600 tracking-wide">SMK TI DWIGUNA</a>
+            
+            <!-- Hamburger menu (mobile) -->
+            <div x-data="{ open: false }" class="md:hidden">
+                <button @click="open = !open" class="text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+    
+                <!-- Mobile menu -->
+                <ul x-show="open" @click.away="open = false" class="absolute top-16 left-0 w-full bg-white shadow-md px-6 py-4 space-y-2 md:hidden">
+                    <li><a href="#hero" class="block text-gray-700 hover:text-blue-500">Beranda</a></li>
+                    <li><a href="#galeri" class="block text-gray-700 hover:text-blue-500">Galeri</a></li>
+                    <li><a href="#berita" class="block text-gray-700 hover:text-blue-500">Berita</a></li>
+                    <li><a href="#agenda" class="block text-gray-700 hover:text-blue-500">Agenda</a></li>
+                    <li><a href="#kontak" class="block text-gray-700 hover:text-blue-500">Kontak</a></li>
+                </ul>
+            </div>
+    
+            <!-- Desktop menu -->
+            <nav class="hidden md:flex space-x-8 text-base font-medium">
+                <a href="#hero" class="text-gray-700 hover:text-blue-600 transition duration-200">Beranda</a>
+                <a href="#galeri" class="text-gray-700 hover:text-blue-600 transition duration-200">Galeri</a>
+                <a href="#berita" class="text-gray-700 hover:text-blue-600 transition duration-200">Berita</a>
+                <a href="#agenda" class="text-gray-700 hover:text-blue-600 transition duration-200">Agenda</a>
+                <a href="#kontak" class="text-gray-700 hover:text-blue-600 transition duration-200">Kontak</a>
+            </nav>
+        </div>
+    </header>
+
 
 <!-- ✅ HERO SECTION -->
-<section class="relative w-full overflow-hidden">
+<section class="relative w-full overflow-hidden" id="hero">
     <div class="relative w-full">
         <div id="heroSlider" class="flex transition-transform duration-700 ease-in-out">
             @foreach($heroImages as $foto)
@@ -53,7 +74,7 @@
 </section>
 
 <!-- ✅ GALERI SECTION -->
-<section class="py-16 bg-gray-100">
+<section class="py-16 bg-gray-100" id="galeri">
     <div class="container mx-auto px-6">
         <div class="relative w-full overflow-hidden">
             <div id="gallerySlider" class="flex transition-transform duration-700 ease-in-out">
@@ -79,21 +100,28 @@
 
 <!-- ✅ BERITA & AGENDA SECTION -->
 <section class="py-16">
-    <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10">
-        <!-- Kiri: Agenda Sekolah -->
-        <div>
-            <h2 class="text-3xl font-bold text-gray-800">Agenda Sekolah</h2>
-            <ul class="mt-4 space-y-4">
-                @foreach($agendaSekolah as $agenda)
-                    <li class="p-4 bg-gray-100 rounded-lg shadow text-gray-700 font-medium">
-                        {{ is_object($agenda) ? $agenda->deskripsi : $agenda }}
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10" id="agenda">
+       <!-- Kiri: Agenda Sekolah -->
+<div>
+    <h2 class="text-3xl font-bold text-gray-800">Agenda Sekolah</h2>
+    <ul class="mt-4 space-y-4">
+        @forelse($agendaSekolah as $agenda)
+            <li class="p-4 bg-gray-100 rounded-lg shadow text-gray-700">
+                <div class="font-bold text-blue-600 mb-1">
+                    📅 {{ $agenda->tanggal ?? '-' }}
+                </div>
+                <div class="font-bold text-2xl">
+                    {{ $agenda->deskripsi }}
+                </div>
+            </li>
+        @empty
+            <li class="p-4 bg-red-100 text-red-700 rounded shadow text-center">Belum ada agenda sekolah.</li>
+        @endforelse
+    </ul>
+</div>
 
         <!-- Kanan: Berita Sekolah -->
-<div class="relative w-full overflow-hidden">
+<div class="relative w-full overflow-hidden" id="berita">
     <h2 class="text-3xl font-bold text-gray-800 mb-4">Informasi Terkini</h2>
     <div id="newsSlider" class="flex transition-transform duration-700 ease-in-out">
         @foreach($beritas as $berita)
@@ -134,19 +162,19 @@
         <h2 class="text-3xl font-bold">Lokasi Sekolah</h2>
         <div class="mt-6">
             <iframe class="w-full h-64 sm:h-96 rounded-lg shadow-lg"
-                src="https://maps.google.com/maps?q=-6.2088,106.8456&z=15&output=embed">
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.661689935032!2d106.80468250985209!3d-6.43747806292208!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69e901c47640f7%3A0x2251ab94bef61b08!2sSMK%20TI%20Dwiguna!5e0!3m2!1sid!2sid!4v1744206903297!5m2!1sid!2sid">
             </iframe>
         </div>
     </div>
 </section>
 
 <!-- ✅ FOOTER -->
-<footer class="bg-gray-800 text-white mt-16">
+<footer class="bg-gray-800 text-white mt-16" id="kontak">
     <div class="container mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Info Sekolah -->
         <div>
             <h4 class="text-xl font-bold mb-2">Tentang Sekolah</h4>
-            <p>Sekolah kami berkomitmen dalam menyediakan pendidikan berkualitas tinggi yang berbasis karakter dan teknologi.</p>
+            <p>SMK TI Dwiguna Depok adalah lembaga pendidikan vokasi yang berkomitmen mencetak generasi muda yang unggul di bidang Teknologi Informasi dan Komunikasi (TIK) serta Otomotif. Dengan mengadopsi kurikulum terkini, kami menyediakan lingkungan belajar yang kondusif untuk mengasah keterampilan teknis dan soft skills siswa. SMK TI Dwiguna menawarkan program studi yang relevan dengan kebutuhan industri, sehingga lulusan kami siap bersaing di dunia kerja yang semakin kompetitif.</p>
         </div>
 
         <!-- Tautan Navigasi -->
@@ -165,9 +193,9 @@
         <div>
             <h4 class="text-xl font-bold mb-2">Kontak</h4>
             <ul class="space-y-2 text-sm">
-                <li><span class="font-semibold">Alamat:</span> Jl. Pendidikan No. 123, Jakarta</li>
-                <li><span class="font-semibold">Email:</span> info@sekolahku.sch.id</li>
-                <li><span class="font-semibold">Telepon:</span> (021) 1234-5678</li>
+                <li><span class="font-semibold">Alamat:</span> Gg. Elga Jl. H. Dul No.100, Bojong Pd. Terong, Kec. Cipayung, Kota Depok, Jawa Barat 16444</li>
+                <li><span class="font-semibold">Email:</span> smk.dwiguna@gmail.com</li>
+                <li><span class="font-semibold">Telepon:</span> 0812-7066-7483</li>
             </ul>
         </div>
     </div>
@@ -229,6 +257,12 @@
     initSlider("heroSlider", "prevHeroSlide", "nextHeroSlide");
     initSlider("gallerySlider", "prevGallerySlide", "nextGallerySlide");
     initSlider("newsSlider", "prevNewsSlide", "nextNewsSlide");
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initSlider("heroSlider", "prevHeroSlide", "nextHeroSlide", true);     // Slider utama (hero)
+        initSlider("gallerySlider", "prevGallerySlide", "nextGallerySlide", false); // Galeri manual
+        initSlider("newsSlider", "prevNewsSlide", "nextNewsSlide", false);    // Berita manual
+    });
 </script>
 
 </body>
