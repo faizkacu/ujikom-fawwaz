@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class Berita extends Model
 {
     protected $table = 'beritas';
-    protected $fillable = ['judul', 'deskripsi', 'foto_id', 'created_by', 'updated_by'];
+    protected $fillable = ['judul', 'deskripsi', 'foto_id', 'foto_upload', 'created_by', 'updated_by'];
 
     public function foto()
     {

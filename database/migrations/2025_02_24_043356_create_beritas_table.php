@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('judul');
             $table->text('deskripsi');
             $table->foreignId('foto_id')->nullable()->constrained('fotos')->onDelete('set null');
+            $table->string('foto_upload')->nullable();
             $table->foreignId('created_by')->constrained('petugas')->onDelete('cascade');
             $table->foreignId('updated_by')->nullable()->constrained('petugas')->onDelete('set null');
             $table->timestamps();

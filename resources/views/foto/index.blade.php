@@ -14,6 +14,7 @@
         @foreach ($fotos as $foto)
             <div class="bg-white rounded-lg shadow-lg overflow-hidden border">
                 <!-- Foto -->
+                {{-- @dd( $foto->file) --}}
                 <img src="{{ asset('storage/' . $foto->file) }}" class="w-full h-48 object-cover">
 
                 <!-- Info Foto -->

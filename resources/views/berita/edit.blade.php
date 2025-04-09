@@ -1,56 +1,65 @@
-<!-- resources/views/berita/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Edit Berita</h2>
+<div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">✏️ Edit Berita</h2>
 
-    <form action="{{ route('berita.update', $berita->id) }}" method="POST">
+    @if(session('error'))
+        <div class="mb-4 text-red-600 font-semibold">{{ session('error') }}</div>
+    @endif
+
+    <form action="{{ route('berita.update', $berita->id) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
         @csrf
         @method('PUT')
 
         <!-- Judul -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium">Judul</label>
-            <input type="text" name="judul" value="{{ $berita->judul }}" class="w-full p-2 border rounded-lg" required>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Judul</label>
+            <input type="text" name="judul" value="{{ old('judul', $berita->judul) }}" required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+            @error('judul') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
         </div>
 
         <!-- Deskripsi -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium">Deskripsi</label>
-            <textarea name="deskripsi" rows="4" class="w-full p-2 border rounded-lg" required>{{ $berita->deskripsi }}</textarea>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+            <textarea name="deskripsi" rows="5" required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg">{{ old('deskripsi', $berita->deskripsi) }}</textarea>
+            @error('deskripsi') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Pilih Foto -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium">Pilih Foto</label>
-            <select name="foto_id" class="w-full p-2 border rounded-lg">
-                <option value="">Tanpa Foto</option>
+        <!-- Pilih dari Galeri -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Pilih Foto dari Galeri</label>
+            <select name="foto_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                <option value="">-- Tidak pilih --</option>
                 @foreach ($fotos as $foto)
-                    <option value="{{ $foto->id }}" @if($berita->foto_id == $foto->id) selected @endif>
+                    <option value="{{ $foto->id }}" {{ old('foto_id', $berita->foto_id) == $foto->id ? 'selected' : '' }}>
                         {{ $foto->judul }}
                     </option>
                 @endforeach
             </select>
+            @error('foto_id') <div class="text-red-500 text-sm mt-1">{{ $message }}</div> @enderror
         </div>
 
-        <!-- Pilih Kategori (Multiple) -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium">Kategori</label>
-            <select name="kategori_id[]" multiple class="w-full p-2 border rounded-lg">
+        <!-- Kategori -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+            <select name="kategori_id[]" multiple class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                 @foreach ($kategoris as $kategori)
-                    <option value="{{ $kategori->id }}" @if($berita->kategoris->contains($kategori->id)) selected @endif>
+                    <option value="{{ $kategori->id }}"
+                        {{ $berita->kategoris->contains($kategori->id) ? 'selected' : '' }}>
                         {{ $kategori->nama }}
                     </option>
                 @endforeach
             </select>
-            <small class="text-gray-500">* Bisa memilih lebih dari satu</small>
+            <small class="text-gray-500">* Tekan Ctrl (Windows) / Cmd (Mac) untuk memilih lebih dari satu</small>
         </div>
 
-        <!-- Submit Button -->
-        <div class="mt-4">
-            <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
-                Update Berita
+        <!-- Tombol Update -->
+        <div class="flex justify-end">
+            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                Simpan Perubahan
             </button>
         </div>
     </form>
